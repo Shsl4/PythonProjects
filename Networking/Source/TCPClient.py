@@ -58,8 +58,7 @@ def MenuPrompt():
 	elif cmd == "clear":
 		ClearScreen()
 	elif cmd == "":
-	### If the provided string is empty, Draw an empty line and go back to the menu.
-		print("")
+	### If the provided string is empty, go back to the menu.
 		MenuPrompt()
 	else:
 	### If the provided string isn't recognized, print message and go back to the menu.
@@ -243,6 +242,10 @@ def CheckServer(bMenu, bPrint):
 
 	global client
 
+	### Rebuild the client socket
+
+	client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
 	#Try to connect the client to the server
 
 	try:
@@ -262,6 +265,7 @@ def CheckServer(bMenu, bPrint):
 
 	if bPrint :
 
+		print("")
 		print("[*] Connection to server successful!")
 
 	if bMenu:

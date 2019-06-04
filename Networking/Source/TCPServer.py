@@ -59,7 +59,7 @@ def MenuPrompt():
 		PrintServerInfo()
 	elif cmd == "clear":
 		ClearScreen()
-	### If the provided string is empty, Draw an empty line and go back to the menu.
+	### If the provided string is empty, go back to the menu.
 	elif cmd == "":
 		MenuPrompt()
 	### If the provided string isn't recognized, print message and go back to the menu.
