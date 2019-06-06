@@ -1,7 +1,7 @@
 import socket
 
-target_host = "127.0.0.1"
-target_port = 80
+targetIP = "127.0.0.1"
+targetPort = 80
 
 #Creating a socket object
 
@@ -9,7 +9,7 @@ client = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
 #Send some data
 
-client.sendto("AAABBBCCC".encode(), (target_host, target_port))
+client.sendto("AAABBBCCC".encode(), (targetIP, targetPort))
 
 #Receive some data
 

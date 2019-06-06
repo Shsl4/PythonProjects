@@ -16,10 +16,10 @@ import os
 import threading
 
 ### The IPv4 Address that the client will try to connect to.
-target_host = "0.0.0.0"
+targetIP = "0.0.0.0"
 
 ### The Port that the cient will be using.
-target_port = 0
+targetPort = 0
 
 ### Defines the client socket.
 client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -28,46 +28,47 @@ client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 answer = ""
 
 ### Prints welcome message and launches the menu.
-def InitScript() :
+def initScript() :
 
 	print("[*] Welcome TCP Client!")
 	print("[*] Use this script to connect to and send a message to a TCP Server. Type 'help' to list available commands")
-	MenuPrompt()
+	menuPrompt()
 
 ### This is the menu prompt. This function checks for a valid (recognized) command defined in the function.
-def MenuPrompt():
+def menuPrompt():
 
 	print("")
-	cmd = input(">> ")
+	cmd = input(">>> ")
 
 	if cmd == "help":
-		PrintHelp()
+		printHelp()
 	elif cmd == "setupserver":
-		PromptServerInfo()
+		promptServerInfo()
 	elif cmd == "checkserver":
-		CheckServer(True, True)
+		checkServer(True, True)
 	elif cmd == "sendmessage":
-		SendMessage()
+		sendMessage()
 	elif cmd == "checkanswer":
-		PrintAnswer()
+		printAnswer()
 	elif cmd == "exit":
 	### Function used to close any python script. See sys documentation for more informations.
 		sys.exit(1)
 	elif cmd == "printinfo":
-		PrintServerInfo()
+		printServerInfo()
 	elif cmd == "clear":
-		ClearScreen()
+		clearScreen()
 	elif cmd == "":
-	### If the provided string is empty, go back to the menu.
-		MenuPrompt()
+	### If the provided string is empty, Draw an empty line and go back to the menu.
+		print("")
+		menuPrompt()
 	else:
 	### If the provided string isn't recognized, print message and go back to the menu.
 		print("")
-		print(">> Unknown command. Type 'help' to list available commands.")
-		MenuPrompt()
+		print(">>> Unknown command. Type 'help' to list available commands.")
+		menuPrompt()
 
 ### Displays the 'help' panel.
-def PrintHelp():
+def printHelp():
 
 	### Print informations
 	print("")
@@ -84,46 +85,46 @@ def PrintHelp():
 
 	### Go back to the menu.
 
-	MenuPrompt()
+	menuPrompt()
 
 ### Function to input the target server's IPv4 and Port informations.
-def PromptServerInfo():
+def promptServerInfo():
 
 	### Set references to global variables.
 
-	global target_host
-	global target_port
+	global targetIP
+	global targetPort
 	global server
 
 	### Ask for IPv4 Input.
 
 	print("")
-	new_target_host = input(">> Please provide an IP address (Default = 172.0.0.1) : ")
+	newTargetIP = input(">>> Please provide an IP address (Default = 172.0.0.1) : ")
 
 	### If the provided string is empty, use defalut value.
 
-	if new_target_host == "" :
+	if newTargetIP == "" :
 
 		### Default Value.
 
-		new_target_host = "127.0.0.1"
+		newTargetIP = "127.0.0.1"
 
 	### Elif provided string is an empty IPv4 (Invalid) :
 
-	elif new_target_host == "0.0.0.0" :
+	elif newTargetIP == "0.0.0.0" :
 
 		### Print error message and go back to the menu.
 
 		print("")
 		print("[*] Error : Invalid IP address provided. Leaving...")
-		MenuPrompt()
+		menuPrompt()
 		return
 
 	### Try to convert input string to IPv4.
 
 	try:
 
-		ipaddress.ip_address(new_target_host)
+		ipaddress.ip_address(newTargetIP)
 	
 	### If the conversion fails :
 
@@ -133,24 +134,24 @@ def PromptServerInfo():
 
 		print("")
 		print("[*] Error : Invalid IP address provided. Leaving...")
-		MenuPrompt()
+		menuPrompt()
 		return
 
-	new_target_port = input(">> Please provide a port (Default = 80) : ")
+	newTargetPort = input(">>> Please provide a port (Default = 80) : ")
 
 	### If the provided string is empty, use defalut value.
 
-	if new_target_port == "":
+	if newTargetPort == "":
 
 		### Default Value.
 
-		new_target_port = "80"
+		newTargetPort = "80"
 	
 	### Try to convert input string to integer.
 
 	try:
 
-		int(new_target_port)
+		int(newTargetPort)
 
 	### If the conversion fails :
 	except ValueError:
@@ -159,98 +160,98 @@ def PromptServerInfo():
 
 		print("")
 		print("[*] Error : Invalid port provided. Leaving...")
-		MenuPrompt()
+		menuPrompt()
 		return
 
 	### If the provided port is <= 0 (Invalid) :
 
-	if int(new_target_port) <= 0:
+	if int(newTargetPort) <= 0:
 
 		### Print error message and go back to the menu.
 
 		print("")
 		print("[*] Error : Invalid port provided. Leaving...")
-		MenuPrompt()
+		menuPrompt()
 		return
 
 	### If the provided port is above the max port value (Invalid) :
 
-	elif int(new_target_port) > 65535:
+	elif int(newTargetPort) > 65535:
 
 		### Print error message and go back to the menu.
 
 		print("")
 		print("[*] Error : Invalid port provided. Leaving...")
-		MenuPrompt()
+		menuPrompt()
 		return
 	
 	### If the new IPv4 and Port are the same as the current ones :
 
-	if target_host == new_target_host :
+	if targetIP == newTargetIP :
 
-		if target_port == int(new_target_port) :
+		if targetPort == int(newTargetPort) :
 
 			### Print info message and go back to the menu.
 
 			print("")
 			print("[*] These values are already set, no need to update. Leaving...")
-			MenuPrompt()
+			menuPrompt()
 			return
 
 	### Else, set these the new values.
 
-	target_host = new_target_host
-	target_port = int(new_target_port)
+	targetIP = newTargetIP
+	targetPort = int(newTargetPort)
 
 	### Print confirmation message, applied infos and go back to the menu
 
 	print("")
 	print("[*] Server Information Updated!")
-	PrintServerInfo()
-	MenuPrompt()
+	printServerInfo()
+	menuPrompt()
 
 ### Print the current server informations.
-def PrintServerInfo():
+def printServerInfo():
 
 	### Set global variables references.
 
-	global target_host
-	global target_port
+	global targetIP
+	global targetPort
 
 	print("")
 	print("[*] Current Configuration :")
 	print("")
-	if target_host == "0.0.0.0":
+	if targetIP == "0.0.0.0":
 		print("[*] Current Server IP Address : Not Set")
 	else:
-		print("[*] Current Server IP Address :", target_host)
-	if target_port ==  0:
+		print("[*] Current Server IP Address :", targetIP)
+	if targetPort ==  0:
 		print("[*] Current Server Port : Not Set")
 	else:
-		print("[*] Current Server Port :", target_port)
+		print("[*] Current Server Port :", targetPort)
 
 	### Go back to the menu.
 
-	MenuPrompt()
+	menuPrompt()
 
 ### Attempt to connect to the server. 
 ### - bMenu (bool) defines if the script goes back to the menu if the execution succeeds. (Will always leave on connection fail)
 ### - bPrint (bool) defines if the success info should be printed or not.
-def CheckServer(bMenu, bPrint):
+def checkServer(bMenu, bPrint):
 
 	### Set Global variable reference.
 
 	global client
-
-	### Rebuild the client socket
+	
+        ### Rebuild the client socket
 
 	client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-
+	
 	#Try to connect the client to the server
 
 	try:
 
-		client.connect((target_host, target_port))
+		client.connect((targetIP, targetPort))
 
 	### If it fails
 
@@ -260,20 +261,19 @@ def CheckServer(bMenu, bPrint):
 
 		print("")
 		print("[*] Error : Unable to connect to server. Make sure that you server informations are valid and that your server is accessible.")
-		MenuPrompt()
+		menuPrompt()
 		return
 
 	if bPrint :
 
-		print("")
 		print("[*] Connection to server successful!")
 
 	if bMenu:
 
-		MenuPrompt()
+		menuPrompt()
 
 ### Send a message to the server.
-def SendMessage():
+def sendMessage():
 
 	### Set global variable reference.
 
@@ -281,12 +281,12 @@ def SendMessage():
 
 	###Try to connect to the server.
 
-	CheckServer(False, False)
+	checkServer(False, False)
 
 	### Ask for message input.
 
 	print("")
-	myString = input(">> Input some string to send to the TCP server : ")
+	myString = input(">>> Input some string to send to the TCP server : ")
 
 	### If the input string is empty :
 
@@ -296,7 +296,7 @@ def SendMessage():
 
 		print("")
 		print("[*] Error : You provided an invalid message. Please input a valid message. Leaving...")
-		MenuPrompt()
+		menuPrompt()
 		return
 
 	### Try to send a message to the server.
@@ -313,7 +313,7 @@ def SendMessage():
 
 		print("")
 		print("[*] Error : Failed to send message. Leaving...")
-		MenuPrompt()
+		menuPrompt()
 		return
 
 	### Else print info message.
@@ -335,7 +335,7 @@ def SendMessage():
 
 		print("")
 		print("[*] No Immediate Answer detected.")
-		MenuPrompt()
+		menuPrompt()
 		return
 	
 	### Else print info message.
@@ -345,10 +345,10 @@ def SendMessage():
 
 	### Go back to the menu
 
-	MenuPrompt()
+	menuPrompt()
 
 ### Check for an answer and print it.
-def PrintAnswer():
+def printAnswer():
 
 	### Set global variable reference.
 
@@ -383,10 +383,10 @@ def PrintAnswer():
 
 	### Go back to the menu.
 
-	MenuPrompt()
+	menuPrompt()
 
 ### Function used to clear the console screen.
-def ClearScreen():
+def clearScreen():
 
 	### Check the OS and use its cleaning command.
 
@@ -405,9 +405,9 @@ def ClearScreen():
 
 	### Reprint Welcome message.
 
-	InitScript()
+	initScript()
 
 ### Starts the Script.
-InitScript()
+initScript()
 
 	

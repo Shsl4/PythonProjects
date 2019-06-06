@@ -16,60 +16,60 @@ import os
 import threading
 
 ### The IPv4 Address that the server will be bound to.
-bind_ip = "0.0.0.0"
+usingIP = "0.0.0.0"
 
 ### The Port the server will be using.
-bind_port = 0
+usingPort = 0
 
 ### Defines the server socket.
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 ### The message which will be sent to clients when receving a packet. (Default = "Hello from server :)" ).
-messagetosend = "Hello from server! :)"
+messageToSend = "Hello from server! :)"
 
 ### Variable used to determine if the server is currently listening to clients.
 bListening = False
 
 ### Prints welcome message and starts the server configuration function.
-def InitScript() :
+def initScript() :
 
 	print("[*] Welcome TCP Server!")
 	print("[*] Use this script to create a TCP Server and receive messages from clients. Type 'help' to list available commands")
 	print("[*] Please configure your server first.")
-	SetupConfiguration()
+	setupConfiguration()
 
 ### This is the menu prompt. This function checks for a valid (recognized) command defined in the function.
-def MenuPrompt():
+def menuPrompt():
 
 	print("")
-	cmd = input(">> ")
+	cmd = input(">>> ")
 
 	if cmd == "help":
-		PrintHelp()
+		printHelp()
 	elif cmd == "setconfig":
-		SetupConfiguration()
+		setupConfiguration()
 	elif cmd == "startlistening":
-		StartListening()
+		startListening()
 	elif cmd == "setmessage":
-		SetMessage()
+		setMessage()
 	elif cmd == "exit":
 	### Function used to close any python script. See sys documentation for more informations.
 		sys.exit(1)
 	elif cmd == "printinfo":
-		PrintServerInfo()
+		printServerInfo()
 	elif cmd == "clear":
-		ClearScreen()
-	### If the provided string is empty, go back to the menu.
+		clearScreen()
+	### If the provided string is empty, Draw an empty line and go back to the menu.
 	elif cmd == "":
-		MenuPrompt()
+		menuPrompt()
 	### If the provided string isn't recognized, print message and go back to the menu.
 	else:
 		print("")
-		print(">> Unknown command. Type 'help' to list available commands.")
-		MenuPrompt()
+		print(">>> Unknown command. Type 'help' to list available commands.")
+		menuPrompt()
 
 ### Displays the 'help' panel.
-def PrintHelp():
+def printHelp():
 
 	### Print informations
 	print("")
@@ -85,47 +85,47 @@ def PrintHelp():
 
 	### Go back to the menu.
 
-	MenuPrompt()
+	menuPrompt()
 
 ### Function to input new server IPv4 and Port informations.
-def SetupConfiguration():
+def setupConfiguration():
 
 	### Set references to global variables.
 
-	global bind_ip
-	global bind_port
+	global usingIP
+	global usingPort
 	global server
 
 	### Ask for IPv4 Input.
 
 	print("")
-	new_bind_ip = input(">> Please provide an IP address (Default = 172.0.0.1) : ")
+	newIP = input(">>> Please provide an IP address (Default = 172.0.0.1) : ")
 
 	### If the provided string is empty, use defalut value.
 
-	if new_bind_ip == "" :
+	if newIP == "" :
 
 		### Default Value.
 
-		new_bind_ip = "127.0.0.1"
+		newIP = "127.0.0.1"
 
 	### Elif provided string is an empty IPv4 (Invalid) :
 
-	elif new_bind_ip == "0.0.0.0" :
+	elif newIP == "0.0.0.0" :
 
 		### Print error message and go back to the menu.
 
 		print("")
 		print("[*] Error : Invalid IP address provided. Leaving...")
 		print("[*] You can try to re-configure your server by typing 'setconfig'")
-		MenuPrompt()
+		menuPrompt()
 		return
 
 	### Try to convert input string to IPv4.
 
 	try:
 
-		ipaddress.ip_address(new_bind_ip)
+		ipaddress.ip_address(newIP)
 	
 	### If the conversion fails :
 
@@ -136,24 +136,24 @@ def SetupConfiguration():
 		print("")
 		print("[*] Error : Invalid IP address provided. Leaving...")
 		print("[*] You can try to re-configure your server by typing 'setconfig'")
-		MenuPrompt()
+		menuPrompt()
 		return
 
 	### Ask for Port input
 
-	new_bind_port = input(">> Please provide a port (Default = 80) : ")
+	newPort = input(">>> Please provide a port (Default = 80) : ")
 
 	### If the provided string is empty, use defalut value.
 
-	if new_bind_port == "":
+	if newPort == "":
 
-		new_bind_port = "80"
+		newPort = "80"
 
 	### Try to convert input string to integer.
 	
 	try:
 
-		int(new_bind_port)
+		int(newPort)
 
 	### If it fails :
 
@@ -164,66 +164,66 @@ def SetupConfiguration():
 		print("")
 		print("[*] Error : Invalid port provided. Leaving...")
 		print("[*] You can try to re-configure your server by typing 'setconfig'")
-		MenuPrompt()
+		menuPrompt()
 		return
 
 	### If the provided port is <= 0 (Invalid) :
 
-	if int(new_bind_port) <= 0:
+	if int(newPort) <= 0:
 		
 		### Print error message and go back to the menu.
 
 		print("")
 		print("[*] Error : Invalid port provided. Leaving...")
 		print("[*] You can try to re-configure your server by typing 'setconfig'")
-		MenuPrompt()
+		menuPrompt()
 		return
 
 	### If the provided port is above the max port value (Invalid) :
 
-	elif int(new_bind_port) > 65535:
+	elif int(newPort) > 65535:
 
 		### Print error message and go back to the menu.
 
 		print("")
 		print("[*] Error : Invalid port provided. Leaving...")
 		print("[*] You can try to re-configure your server by typing 'setconfig'")
-		MenuPrompt()
+		menuPrompt()
 		return
 
 	### If the new IPv4 and Port are the same as the current ones :
 
-	if bind_ip == new_bind_ip :
+	if usingIP == newIP :
 
-		if bind_port == int(new_bind_port) :
+		if usingPort == int(newPort) :
 
 			### Print info message and go back to the menu.
 
 			print("")
 			print("[*] These values are already set, no need to update. Leaving...")
-			MenuPrompt()
+			menuPrompt()
 			return
 
 	### Else, set these the new values.
 
-	bind_ip = new_bind_ip
-	bind_port = int(new_bind_port)	
+	usingIP = newIP
+	usingPort = int(newPort)	
 
 	### Print confirmation message, applied infos and go back to the menu
 
 	print("")
 	print("[*] Server Configuration Updated!")
-	PrintServerInfo()
-	MenuPrompt()
+	printServerInfo()
+	menuPrompt()
 
 ### Checks the Pv4 and Port informations and rebuild the server socket.
-def CheckValidityAndRebuildSocket():
+def checkValidityAndRebuildSocket():
 
 	### Set reference to global variables.
 
 	global server
-	global bind_ip
-	global bind_port
+	global usingIP
+	global usingPort
 
 	### Redefine the server socket.
 
@@ -231,19 +231,19 @@ def CheckValidityAndRebuildSocket():
 
 	### Check for the current IPv4's and Port's validity.
 
-	if bind_ip == "0.0.0.0" or bind_port == 0:
+	if usingIP == "0.0.0.0" or usingPort == 0:
 
 		### If one of them is null, print error message and go back to the menu. 
 
 		print("")
 		print("[*] Error : Unable to server bind configuration. Please check your configuration. Leaving...")
-		MenuPrompt()
+		menuPrompt()
 
 	### Try to bind the server socket to the provided IPv4 and Port.
 
 	try:
 
-		server.bind((bind_ip, bind_port))
+		server.bind((usingIP, usingPort))
 
 	### If it fails :
 
@@ -253,11 +253,11 @@ def CheckValidityAndRebuildSocket():
 
 		print("")
 		print("[*] Error : Unable to server bind configuration. Please check your configuration. Leaving...")
-		MenuPrompt()
+		menuPrompt()
 		return
 
 ### Function used to start listening to clients.
-def StartListening(): 
+def startListening(): 
 	
 	### Set global variable reference.
 
@@ -265,7 +265,7 @@ def StartListening():
 
 	### Try to rebuild the server socket
 
-	CheckValidityAndRebuildSocket()
+	checkValidityAndRebuildSocket()
 
 	### Aesthetics
 
@@ -284,13 +284,13 @@ def StartListening():
 		### Print error message and go back to the menu.
 
 		print("[*] Error : Unable to listen using the desired IP and Port")
-		MenuPrompt()
+		menuPrompt()
 		return
 
 	### Else print status message and listen.
 
-	print("[*] This TCP Server will attempt to send '", messagetosend, "' back to a client when it receives a request")
-	print("[*] Now Listening on %s through port %d" % (bind_ip, bind_port))
+	print("[*] This TCP Server will attempt to send '", messageToSend, "' back to a client when it receives a request")
+	print("[*] Now Listening on %s through port %d" % (usingIP, usingPort))
 	print("[*] Send the code 'end' from a TCP client to end the listening.")
 	bListening = True
 
@@ -319,21 +319,21 @@ def StartListening():
 			print("")
 			print("[*] Accepted connection from %s : %d" % (addr[0], addr[1]))
 
-			client_handler = threading.Thread(target=handle_client,args=(client,)) 
+			client_handler = threading.Thread(target=handleClient,args=(client,)) 
 			client_handler.start()
 
 ### Function used to handle the client.
-def handle_client(client_socket):
+def handleClient(clientSocket):
 	
 	### Set global variable reference.
 
-	global messagetosend
+	global messageToSend
 
 	### When receiving a message, try to receive and decode it.
 
 	try :
 
-		request = client_socket.recv(4096).decode()
+		request = clientSocket.recv(4096).decode()
 
 
 	### If client suddenly disconnects (Invalid Request) :
@@ -354,9 +354,9 @@ def handle_client(client_socket):
 
 			print("")
 			print("[*] Shutdown message received. Leaving...")
-			client_socket.send("SUCCESSFULLY TERMINATED.".encode())
-			client_socket.close()
-			StopListening()
+			clientSocket.send("SUCCESSFULLY TERMINATED.".encode())
+			clientSocket.close()
+			stopListening()
 			return
 
 		### If the received message is empty :
@@ -373,11 +373,11 @@ def handle_client(client_socket):
 
 			print("")
 			print("[*] Received: %s" % request)
-			client_socket.send(messagetosend.encode())
-			client_socket.close()
+			clientSocket.send(messageToSend.encode())
+			clientSocket.close()
 
 ### Function used to stop listening to clients.		
-def StopListening(): 
+def stopListening(): 
 
 	### Set global variable reference
 
@@ -392,36 +392,36 @@ def StopListening():
 	print("")
 	print("[*] Closing connections...")
 	bListening = False
-	MenuPrompt()
+	menuPrompt()
 
 ### Function used to set the message that will be sent to a client when receving a packet.
-def SetMessage():
+def setMessage():
 
 	### Set global variable reference.
 
-	global messagetosend
+	global messageToSend
 
 	### Print instruction message.
 
 	print("")
-	new_message = input("[*] Input a message to send back to a client when the receiving a packet : ")
+	newMessage = input("[*] Input a message to send back to a client when the receiving a packet : ")
 
 	### If the provided message is empty :
 
-	if new_message == "":
+	if newMessage == "":
 
 		### Print error messages and go back to the menu
 
 		print("")
 		print("[*] Error : Unable to send empty messages! Leaving...")
-		MenuPrompt()
+		menuPrompt()
 		return
 
 	### Else try to set the new message as "messagetosend".
 
 	try :
 
-		messagetosend = new_message
+		messageToSend = newMessage
 	
 	### If it fails :
 	except Exception:
@@ -429,17 +429,17 @@ def SetMessage():
 		### Print error and go back to the menu.
 
 		print("[*] Unknown Error : Unable to set the new message. Leaving...")
-		MenuPrompt()
+		menuPrompt()
 		return
 
 	### Print status message
 
 	print("")
 	print("[*] New message set!")
-	MenuPrompt()
+	menuPrompt()
 	
 ### Function used to clear the console screen
-def ClearScreen():
+def clearScreen():
 
 	### Check the OS and use its cleaning command.
 
@@ -462,38 +462,38 @@ def ClearScreen():
 	print("[*] Welcome TCP Server!")
 	print("[*] Use this script to create a TCP Server. Type 'help' to list available commands")
 
-	MenuPrompt()
+	menuPrompt()
 
 ### Print the current server informations
-def PrintServerInfo():
+def printServerInfo():
 
 	### Set global variables references.
 
-	global bind_ip
-	global bind_port
-	global messagetosend
+	global usingIP
+	global usingPort
+	global messageToSend
 
 	print("")
 	print("[*] Current Configuration :")
 	print("")
 
-	if bind_ip == "0.0.0.0":
+	if usingIP == "0.0.0.0":
 		print("[*] Current Server IP Address : Not Set")
 	else:
-		print("[*] Current Server IP Address :", bind_ip)
-	if bind_port ==  0:
+		print("[*] Current Server IP Address :", usingIP)
+	if usingPort ==  0:
 		print("[*] Current Server Port : Not Set")
 	else:
-		print("[*] Current Server Port :", bind_port)
+		print("[*] Current Server Port :", usingPort)
 
-	print("[*] Current Message :", messagetosend)
+	print("[*] Current Message :", messageToSend)
 
 	### Go back to the menu.
 
-	MenuPrompt()
+	menuPrompt()
 
 ### Starts the Script.
-InitScript()
+initScript()
 
 
 

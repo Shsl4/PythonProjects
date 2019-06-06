@@ -5,7 +5,7 @@
     <ProjectGuid>024ab768-903a-4615-8b11-9c0d703391c2</ProjectGuid>
     <ProjectHome>
     </ProjectHome>
-    <StartupFile>Networking\Source\TCPServer.py</StartupFile>
+    <StartupFile>Audio\WaveformGenerator.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -22,22 +22,20 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Random\Source\MyFirstApp.py" />
-    <Compile Include="Networking\Source\TCPServer.py">
+    <Compile Include="Audio\WaveformGenerator.py" />
+    <Compile Include="Random\MyFirstApp.py" />
+    <Compile Include="Networking\TCPServer.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Networking\Source\UDPClient.py" />
-    <Compile Include="Networking\Source\TCPClient.py">
+    <Compile Include="Networking\UDPClient.py" />
+    <Compile Include="Networking\TCPClient.py">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Networking\" />
-    <Folder Include="Networking\Compiled Scripts\" />
-    <Folder Include="Networking\Source\" />
+    <Folder Include="Audio\" />
     <Folder Include="Random\" />
-    <Folder Include="Random\Compiled Scripts\" />
-    <Folder Include="Random\Source\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in
