@@ -176,12 +176,12 @@ def printLib(inReqType) :
 
 	elif inReqType == reqType.ampReq:
 
-		print("[*] Please enter an Amplitude (Recommended : 8000) :")
+		print("[*] Please enter an Amplitude (Recommended : 8000, Max = 22500) :")
 		print("")
 
 	elif inReqType == reqType.freqReq:
 
-		print("[*] Please enter a frequency (Recommended : 100) :")
+		print("[*] Please enter a frequency (Recommended : 100, Max = 10000) :")
 		print("")
 
 	elif inReqType == reqType.fileNameReq:
@@ -242,35 +242,33 @@ def setupWaveVariables(waveType):
 
 		else :
 
-			if newAmp > 22767 :
+			if newAmp > 22500 :
 
 				printLib(reqType.maxExceedReq)
 
-				amplitude = 22767
-				
-			else:
+				newAmp = 22500
 					
-				amplitude = newAmp
+			amplitude = newAmp
 
-				printLib(reqType.freqReq)
+			printLib(reqType.freqReq)
 
-				try :
+			try :
 
-					newFreq = float(prompter())
+				newFreq = float(prompter())
 
-				except Exception :
+			except Exception :
 
-					printLib(reqType.incorrectTypeReq)
+				printLib(reqType.incorrectTypeReq)
 
-				else :
+			else :
 
-					if freq > 50000 :
+				if freq > 10000 :
 
-						freq = 50000
+					printLib(reqType.maxExceedReq)
 
-					else :
+					newFreq = 10000
 					
-						freq = newFreq
+				freq = newFreq
 
 				printLib(reqType.processReq)
 
